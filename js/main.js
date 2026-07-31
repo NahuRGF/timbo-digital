@@ -97,6 +97,7 @@
       var nombre = contactForm.querySelector("#nombre");
       var email = contactForm.querySelector("#email");
       var mensaje = contactForm.querySelector("#mensaje");
+      var submitBtn = contactForm.querySelector("button[type='submit']");
 
       var valid = true;
       [nombre, email, mensaje].forEach(function (input) {
@@ -113,16 +114,33 @@
         return;
       }
 
-      var asunto = encodeURIComponent("Contacto desde la web - " + nombre.value.trim());
-      var cuerpo = encodeURIComponent(
-        "Nombre: " + nombre.value.trim() + "\n" +
-        "Email: " + email.value.trim() + "\n\n" +
-        mensaje.value.trim()
-      );
-      window.location.href = "mailto:" + EMAIL + "?subject=" + asunto + "&body=" + cuerpo;
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Enviando...";
 
-      setStatus("Se abrió tu cliente de correo para enviar el mensaje. ¡Gracias!", true);
-      contactForm.reset();
+      fetch(contactForm.action, {
+        method: "POST",
+        body: new FormData(contactForm),
+        headers: { Accept: "application/json" }
+      })
+        .then(function (res) {
+          if (!res.ok) throw new Error("Envío rechazado por Formspree");
+          setStatus("¡Mensaje enviado! Te respondemos a la brevedad.", true);
+          contactForm.reset();
+        })
+        .catch(function () {
+          var asunto = encodeURIComponent("Contacto desde la web - " + nombre.value.trim());
+          var cuerpo = encodeURIComponent(
+            "Nombre: " + nombre.value.trim() + "\n" +
+            "Email: " + email.value.trim() + "\n\n" +
+            mensaje.value.trim()
+          );
+          window.location.href = "mailto:" + EMAIL + "?subject=" + asunto + "&body=" + cuerpo;
+          setStatus("El envío online falló. Se abrió tu correo para mandarlo directo.", true);
+        })
+        .finally(function () {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Enviar mensaje";
+        });
     });
 
     contactForm.querySelectorAll("input, textarea").forEach(function (input) {
