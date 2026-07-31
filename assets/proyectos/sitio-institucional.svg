@@ -1,0 +1,35 @@
+<svg width="400" height="200" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sitio institucional">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#40916C"/>
+      <stop offset="100%" stop-color="#1B4332"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="400" height="200" rx="14" fill="url(#bg)"/>
+  <circle cx="352" cy="22" r="60" fill="rgba(255,255,255,0.05)"/>
+  <circle cx="30" cy="190" r="80" fill="rgba(255,255,255,0.05)"/>
+
+  <g>
+    <rect x="70" y="78" width="140" height="88" rx="8" fill="#FBF6EC"/>
+    <rect x="132" y="166" width="16" height="12" fill="#95D5B2"/>
+    <rect x="112" y="178" width="56" height="6" rx="3" fill="#95D5B2"/>
+
+    <circle cx="86" cy="92" r="4" fill="#74C69D"/>
+    <circle cx="100" cy="92" r="4" fill="#95D5B2"/>
+    <circle cx="114" cy="92" r="4" fill="#B7E4C7"/>
+    <rect x="124" y="88" width="70" height="8" rx="4" fill="#95D5B2"/>
+
+    <rect x="86" y="104" width="110" height="10" rx="5" fill="#40916C"/>
+    <rect x="86" y="124" width="84" height="8" rx="4" fill="#74C69D"/>
+    <rect x="86" y="138" width="110" height="6" rx="3" fill="#95D5B2"/>
+    <rect x="86" y="150" width="94" height="6" rx="3" fill="#95D5B2"/>
+    <rect x="86" y="162" width="60" height="6" rx="3" fill="#B7E4C7"/>
+  </g>
+
+  <g stroke="#B7E4C7" fill="none">
+    <circle cx="300" cy="118" r="30" stroke-width="5"/>
+    <ellipse cx="300" cy="118" rx="12" ry="30" stroke-width="4"/>
+    <path d="M 270 118 h 60" stroke-width="4"/>
+  </g>
+</svg>
