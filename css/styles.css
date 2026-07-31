@@ -275,6 +275,15 @@ ul { list-style: none; }
   font-size: 0.85rem;
   background: var(--crema);
 }
+.card-img {
+  margin-top: auto;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  display: block;
+  transition: transform 0.35s ease;
+}
+.card-project:hover .card-img { transform: scale(1.03); }
 .section-note { text-align: center; margin-top: 34px; color: var(--texto-suave); }
 .section-note a { color: var(--verde); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 
