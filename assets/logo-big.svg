@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="Timbó Digital">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#40916C"/>
+      <stop offset="100%" stop-color="#1B4332"/>
+    </linearGradient>
+    <linearGradient id="trunk" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#7A5230"/>
+      <stop offset="100%" stop-color="#5C3A1E"/>
+    </linearGradient>
+  </defs>
+
+  <circle cx="100" cy="100" r="96" fill="url(#bg)"/>
+  <circle cx="100" cy="100" r="96" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="3"/>
+
+  <g>
+    <circle cx="100" cy="72" r="45" fill="#95D5B2"/>
+    <circle cx="64" cy="96" r="30" fill="#74C69D"/>
+    <circle cx="136" cy="96" r="30" fill="#74C69D"/>
+    <circle cx="100" cy="98" r="34" fill="#40916C"/>
+    <circle cx="80" cy="62" r="16" fill="#B7E4C7"/>
+    <circle cx="122" cy="64" r="14" fill="#B7E4C7"/>
+  </g>
+
+  <path d="M90 118 h20 l4 32 q0 6 -5 6 h-18 q-5 0 -5 -6 z" fill="url(#trunk)"/>
+  <path d="M88 152 q-6 8 -14 8 q10 0 14 -4 z" fill="#5C3A1E"/>
+  <path d="M112 152 q6 8 14 8 q-10 0 -14 -4 z" fill="#5C3A1E"/>
+  <path d="M98 156 q0 8 -6 12 q8 0 8 -8 z" fill="#5C3A1E"/>
+  <path d="M102 156 q0 8 6 12 q-8 0 -8 -8 z" fill="#5C3A1E"/>
+</svg>

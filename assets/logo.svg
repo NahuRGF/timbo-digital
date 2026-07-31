@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" role="img" aria-label="Timbó Digital">
+  <rect width="48" height="48" rx="12" fill="#2D6A4F"/>
+  <circle cx="24" cy="17" r="10" fill="#95D5B2"/>
+  <circle cx="16.5" cy="21.5" r="6.5" fill="#74C69D"/>
+  <circle cx="31.5" cy="21.5" r="6.5" fill="#74C69D"/>
+  <circle cx="24" cy="21" r="6" fill="#40916C"/>
+  <path d="M22.5 25 h3 v14 a1.5 1.5 0 0 1 -1.5 1.5 a1.5 1.5 0 0 1 -1.5 -1.5 z" fill="#7A5230"/>
+</svg>
