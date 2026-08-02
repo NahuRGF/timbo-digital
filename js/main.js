@@ -81,34 +81,6 @@
     });
   }
 
-  // ---------- Parallax de los árboles ----------
-  var parallaxEls = document.querySelectorAll("[data-speed]");
-  var parallaxTicking = false;
-
-  function updateParallax() {
-    var vh = window.innerHeight || document.documentElement.clientHeight;
-    parallaxEls.forEach(function (el) {
-      var rect = el.getBoundingClientRect();
-      var speed = parseFloat(el.getAttribute("data-speed")) || 0.15;
-      var offset = (rect.top + rect.height / 2 - vh / 2) * speed;
-      el.style.transform = "translate3d(0, " + offset.toFixed(1) + "px, 0)";
-    });
-    parallaxTicking = false;
-  }
-
-  function requestParallax() {
-    if (!parallaxTicking) {
-      parallaxTicking = true;
-      window.requestAnimationFrame(updateParallax);
-    }
-  }
-
-  if (!reduceMotion && parallaxEls.length) {
-    window.addEventListener("scroll", requestParallax, { passive: true });
-    window.addEventListener("resize", requestParallax, { passive: true });
-    updateParallax();
-  }
-
   function setStatus(msg, ok) {
     formStatus.textContent = msg;
     formStatus.className = "form-status " + (ok ? "ok" : "bad");

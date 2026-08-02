@@ -221,16 +221,6 @@ ul { list-style: none; }
 .section-alt { background: var(--crema-oscura); }
 .section > .container { position: relative; z-index: 1; }
 
-.arbol-bg {
-  position: absolute;
-  z-index: 0;
-  opacity: 0.12;
-  pointer-events: none;
-  user-select: none;
-  max-width: 60vw;
-  will-change: transform;
-}
-
 .section-head { max-width: 640px; margin: 0 auto 54px; text-align: center; }
 .section-eyebrow {
   font-weight: 600;
