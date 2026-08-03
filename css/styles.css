@@ -311,6 +311,72 @@ ul { list-style: none; }
 }
 .card-project:hover .card-img { transform: scale(1.03); }
 
+/* ---------- Herramienta gratis ---------- */
+.gratis-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 48px;
+  align-items: center;
+}
+.gratis-badge {
+  display: inline-block;
+  background: rgba(45, 106, 79, 0.12);
+  border: 1px solid rgba(45, 106, 79, 0.3);
+  color: var(--verde-oscuro);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+.gratis-features {
+  list-style: none;
+  margin: 18px 0 26px;
+  display: grid;
+  gap: 10px;
+}
+.gratis-features li {
+  position: relative;
+  padding-left: 30px;
+  color: var(--texto-suave);
+  font-size: 0.95rem;
+}
+.gratis-features li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(45, 106, 79, 0.12);
+  color: var(--verde-oscuro);
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.gratis-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.gratis-illus .gratis-img {
+  width: 100%;
+  height: auto;
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  display: block;
+}
+
+@media (max-width: 900px) {
+  .gratis-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
+
 .card-product { gap: 12px; }
 #listos .cards { grid-template-columns: repeat(5, 1fr); gap: 18px; }
 .card-product .card-badge { font-size: 0.72rem; padding: 3px 10px; }
