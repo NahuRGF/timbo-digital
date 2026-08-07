@@ -555,3 +555,286 @@ ul { list-style: none; }
   }
   .reveal { opacity: 1; transform: none; }
 }
+
+/* =================================================================
+   UPGRADE VISUAL — aurora, gradientes animados, spotlight, tilt,
+   blur text, contadores, marquee, barra de progreso y detalle.
+   ================================================================= */
+
+/* ---------- Grano sutil en toda la página ---------- */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml;utf8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='120'%20height='120'%3E%3Cfilter%20id='n'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.9'%20numOctaves='2'%20stitchTiles='stitch'/%3E%3CfeColorMatrix%20type='saturate'%20values='0'/%3E%3C/filter%3E%3Crect%20width='120'%20height='120'%20filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.035;
+  pointer-events: none;
+  z-index: 9998;
+}
+
+/* ---------- Barra de progreso de scroll ---------- */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--verde), var(--verde-arena));
+  z-index: 200;
+  transition: width 0.12s linear;
+}
+
+/* ---------- Aurora (fondo animado del hero) ---------- */
+.hero .aurora {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.aurora .blob {
+  position: absolute;
+  width: 46vmax;
+  height: 46vmax;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.55;
+  will-change: transform;
+}
+.aurora .b1 {
+  background: radial-gradient(circle, rgba(64, 145, 108, 0.5), transparent 62%);
+  top: -24vmax;
+  left: -10vmax;
+  animation: aurora-a 18s ease-in-out infinite alternate;
+}
+.aurora .b2 {
+  background: radial-gradient(circle, rgba(149, 213, 178, 0.4), transparent 62%);
+  top: 6vmax;
+  right: -14vmax;
+  animation: aurora-b 22s ease-in-out infinite alternate;
+}
+.aurora .b3 {
+  background: radial-gradient(circle, rgba(122, 82, 48, 0.28), transparent 60%);
+  bottom: -26vmax;
+  left: 24vmax;
+  animation: aurora-c 26s ease-in-out infinite alternate;
+}
+@keyframes aurora-a {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(8vmax, 6vmax, 0) scale(1.15); }
+}
+@keyframes aurora-b {
+  from { transform: translate3d(0, 0, 0) scale(1.1); }
+  to { transform: translate3d(-6vmax, -8vmax, 0) scale(0.95); }
+}
+@keyframes aurora-c {
+  from { transform: translate3d(0, 0, 0) scale(0.95); }
+  to { transform: translate3d(-9vmax, 4vmax, 0) scale(1.2); }
+}
+
+/* ---------- Texto con gradiente animado ---------- */
+.gradient-text,
+.hero-title .highlight {
+  background: linear-gradient(92deg, var(--verde) 0%, var(--verde-claro) 35%, var(--verde-arena) 50%, var(--verde-claro) 65%, var(--verde) 100%);
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: grad-shift 7s linear infinite;
+}
+@keyframes grad-shift {
+  to { background-position: 220% center; }
+}
+
+/* ---------- Texto con desenfoque (blur-text) ---------- */
+.blur-text .wt {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(12px);
+  transform: translateY(16px);
+  transition: opacity 0.6s ease, filter 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.blur-text .wt.inline { display: inline; }
+.blur-text.inview .wt {
+  opacity: 1;
+  filter: blur(0);
+  transform: none;
+}
+
+/* ---------- Marquee ---------- */
+.marquee {
+  background: var(--verde-oscuro);
+  color: rgba(255, 255, 255, 0.88);
+  overflow: hidden;
+  padding: 16px 0;
+  position: relative;
+  z-index: 2;
+  border-block: 1px solid rgba(149, 213, 178, 0.18);
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+}
+.marquee-track span {
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 1.02rem;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.marquee-track span::after {
+  content: "·";
+  margin: 0 1.35rem;
+  color: var(--verde-arena);
+}
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+
+/* ---------- Stats con contador ---------- */
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 14px 44px;
+  justify-content: start;
+  margin-top: 34px;
+  padding-top: 26px;
+  border-top: 1px solid rgba(74, 47, 27, 0.12);
+}
+.hero-stats li {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.stat-value {
+  font-family: var(--font-head);
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--verde-oscuro);
+}
+.stat-value::after { content: attr(data-suffix); color: var(--verde); }
+.stat-label {
+  font-size: 0.82rem;
+  color: var(--texto-suave);
+}
+
+/* ---------- Spotlight en tarjetas ---------- */
+.card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(360px circle at var(--mx, 50%) var(--my, 50%), rgba(64, 145, 108, 0.14), transparent 45%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+.card:hover::before { opacity: 1; }
+.card > * { position: relative; z-index: 1; }
+
+/* ---------- Tilt sutil en proyectos ---------- */
+.card-project {
+  transform: perspective(900px);
+  will-change: transform;
+}
+.card-project:hover {
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-6px);
+}
+
+/* ---------- Botón primario con brillo animado ---------- */
+.btn-primary {
+  background: linear-gradient(120deg, var(--verde-oscuro) 0%, var(--verde) 45%, var(--verde-claro) 50%, var(--verde) 55%, var(--verde-oscuro) 100%);
+  background-size: 220% auto;
+  animation: btn-shine 6s linear infinite;
+  border: none;
+}
+.btn-primary:hover {
+  background: linear-gradient(120deg, var(--verde-oscuro) 0%, var(--verde) 45%, var(--verde-claro) 50%, var(--verde) 55%, var(--verde-oscuro) 100%);
+  background-size: 220% auto;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(45, 106, 79, 0.4);
+}
+@keyframes btn-shine {
+  to { background-position: 220% center; }
+}
+
+/* ---------- Link activo en el nav ---------- */
+.nav-link.active { color: var(--verde); }
+.nav-link.active::after { width: 100%; }
+
+/* ---------- Badge gratis con brillo ---------- */
+.gratis-badge {
+  position: relative;
+  overflow: hidden;
+}
+.gratis-badge::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: skewX(-20deg);
+  animation: badge-shine 3.6s ease-in-out infinite;
+}
+@keyframes badge-shine {
+  0%, 55% { left: -120%; }
+  100% { left: 170%; }
+}
+
+/* ---------- Glow detrás de la ilustración gratis ---------- */
+.gratis-illus { position: relative; }
+.gratis-illus::before {
+  content: "";
+  position: absolute;
+  inset: 6% 4%;
+  background: radial-gradient(50% 50% at 50% 50%, rgba(64, 145, 108, 0.35), transparent 70%);
+  filter: blur(22px);
+  z-index: 0;
+}
+.gratis-illus .gratis-img { position: relative; z-index: 1; }
+
+/* ---------- Footer con línea degradada ---------- */
+.footer { position: relative; }
+.footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--verde-arena), transparent);
+}
+
+/* ---------- Pulso en el botón de WhatsApp ---------- */
+.whatsapp-float {
+  animation: wa-pulse 2.6s ease-in-out infinite;
+}
+@keyframes wa-pulse {
+  0%, 100% { box-shadow: 0 8px 24px rgba(37, 211, 102, 0.45); }
+  50% { box-shadow: 0 8px 30px rgba(37, 211, 102, 0.7), 0 0 0 0 rgba(37, 211, 102, 0.35); }
+}
+
+/* ---------- Ajustes responsive del upgrade ---------- */
+@media (max-width: 900px) {
+  .hero-stats {
+    grid-template-columns: repeat(3, auto);
+    justify-content: center;
+    gap: 12px 30px;
+  }
+}
+@media (max-width: 480px) {
+  .hero-stats { gap: 10px 20px; }
+  .stat-value { font-size: 1.6rem; }
+  .stat-label { font-size: 0.72rem; }
+}

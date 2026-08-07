@@ -149,4 +149,155 @@
       });
     });
   }
+
+  // ---------- Barra de progreso de scroll ----------
+  var progress = document.getElementById("scrollProgress");
+  function updateProgress() {
+    var doc = document.documentElement;
+    var max = doc.scrollHeight - doc.clientHeight;
+    progress.style.width = (max > 0 ? (window.scrollY / max) * 100 : 0) + "%";
+  }
+  if (progress) {
+    window.addEventListener("scroll", updateProgress, { passive: true });
+    updateProgress();
+  }
+
+  // ---------- Texto con desenfoque (blur-text) ----------
+  function splitBlurWords(el) {
+    var index = 0;
+    var frag = document.createDocumentFragment();
+    Array.prototype.slice.call(el.childNodes).forEach(function (node) {
+      if (node.nodeType === 3) {
+        var words = node.textContent.trim().split(/\s+/);
+        words.forEach(function (w) {
+          if (!w) return;
+          var s = document.createElement("span");
+          s.className = "wt";
+          s.textContent = w;
+          if (index > 0) s.style.marginLeft = "0.26em";
+          s.style.transitionDelay = index * 70 + "ms";
+          index++;
+          frag.appendChild(s);
+        });
+      } else if (node.nodeType === 1) {
+        var wrap = document.createElement("span");
+        wrap.className = "wt inline";
+        wrap.appendChild(node.cloneNode(true));
+        if (index > 0) wrap.style.marginLeft = "0.26em";
+        wrap.style.transitionDelay = index * 70 + "ms";
+        index++;
+        frag.appendChild(wrap);
+      }
+    });
+    el.textContent = "";
+    el.appendChild(frag);
+  }
+
+  var blurEls = document.querySelectorAll(".blur-text");
+  blurEls.forEach(function (el) {
+    splitBlurWords(el);
+    if (reduceMotion) {
+      el.classList.add("inview");
+      return;
+    }
+    var show = function () { el.classList.add("inview"); };
+    if (el.closest(".hero")) {
+      setTimeout(show, 250);
+    } else {
+      var bio = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              show();
+              bio.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.3 }
+      );
+      bio.observe(el);
+    }
+  });
+
+  // ---------- Spotlight que sigue al mouse en las tarjetas ----------
+  document.querySelectorAll(".card").forEach(function (card) {
+    card.addEventListener("mousemove", function (e) {
+      var r = card.getBoundingClientRect();
+      card.style.setProperty("--mx", e.clientX - r.left + "px");
+      card.style.setProperty("--my", e.clientY - r.top + "px");
+    });
+  });
+
+  // ---------- Tilt sutil en las tarjetas de portafolio ----------
+  if (!reduceMotion) {
+    document.querySelectorAll(".card-project").forEach(function (c) {
+      c.addEventListener("mousemove", function (e) {
+        var r = c.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width - 0.5;
+        var py = (e.clientY - r.top) / r.height - 0.5;
+        c.style.setProperty("--ry", (px * 8).toFixed(2) + "deg");
+        c.style.setProperty("--rx", (-py * 8).toFixed(2) + "deg");
+      });
+      c.addEventListener("mouseleave", function () {
+        c.style.setProperty("--rx", "0deg");
+        c.style.setProperty("--ry", "0deg");
+      });
+    });
+  }
+
+  // ---------- Contadores animados ----------
+  function animateCount(el) {
+    var target = parseInt(el.getAttribute("data-count"), 10) || 0;
+    if (reduceMotion) {
+      el.textContent = String(target);
+      return;
+    }
+    var duration = 1600;
+    var start = null;
+    function step(ts) {
+      if (!start) start = ts;
+      var p = Math.min((ts - start) / duration, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = String(Math.round(target * eased));
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  document.querySelectorAll("[data-count]").forEach(function (el) {
+    if (!("IntersectionObserver" in window)) {
+      el.textContent = el.getAttribute("data-count") || "0";
+      return;
+    }
+    var cio = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            animateCount(el);
+            cio.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+    cio.observe(el);
+  });
+
+  // ---------- Link activo del nav según la sección visible ----------
+  var spySections = document.querySelectorAll("main section[id]");
+  var spyLinks = document.querySelectorAll(".nav-link");
+  if (spySections.length && spyLinks.length && "IntersectionObserver" in window) {
+    var spy = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          spyLinks.forEach(function (link) {
+            link.classList.toggle("active", link.getAttribute("href") === "#" + entry.target.id);
+          });
+        });
+      },
+      { rootMargin: "-45% 0px -50% 0px" }
+    );
+    spySections.forEach(function (s) { spy.observe(s); });
+  }
 })();
