@@ -351,7 +351,7 @@
 
   function openLightbox(card) {
     var slug = card.getAttribute("data-folder");
-    var wrap = card.querySelector(".card-img-wrap");
+    var wrap = card.querySelector(".proj-folder");
     var img = card.querySelector(".card-img");
     var title = (wrap && wrap.getAttribute("data-title")) || "";
     var list = (gallery[slug] || []).filter(Boolean);
@@ -376,7 +376,7 @@
 
   if (lightbox) {
     projectCards.forEach(function (card) {
-      var wrap = card.querySelector(".card-img-wrap");
+      var wrap = card.querySelector(".proj-folder");
       if (wrap) wrap.addEventListener("click", function () { openLightbox(card); });
     });
     document.getElementById("lightboxClose").addEventListener("click", closeLightbox);

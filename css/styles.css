@@ -952,47 +952,133 @@ body::after {
   gap: 12px;
 }
 
-/* ---------- Imagen del portafolio ---------- */
-.card-img-wrap {
-  display: block;
-  width: 100%;
-  padding: 0;
-  margin-top: auto;
-  border: none;
-  background: var(--crema);
-  border-radius: 14px;
-  overflow: hidden;
-  position: relative;
-  aspect-ratio: 16 / 10;
-  cursor: pointer;
-  border: 1px solid rgba(74, 47, 27, 0.10);
+/* ---------- Portafolio: carpetas 3D ---------- */
+#portafolio .cards {
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
 }
-.card-img-wrap img {
+.proj-folder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: auto;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  width: 100%;
+}
+.folder-scene {
+  position: relative;
+  width: 240px;
+  height: 160px;
+  perspective: 1500px;
+  z-index: 2;
+  --f1-a: #f59e0b;
+  --f1-b: #fbbf24;
+  --f1-tab: #fbbf24;
+  --f5: #d97706;
+  --glow-top: #fbbf24;
+  --glow-bottom: #d97706;
+}
+.folder-scene .work-5,
+.folder-scene .work-4,
+.folder-scene .work-3,
+.folder-scene .work-2,
+.folder-scene .work-1 {
+  position: absolute;
+  border-radius: 16px;
+  transform-origin: bottom;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.folder-scene .work-5 {
+  inset: 0;
+  background: var(--f5);
+  border-top-left-radius: 0;
+  transform-origin: top;
+}
+.folder-scene .work-4 { inset: 4px; background: #a1a1aa; }
+.folder-scene .work-3 { inset: 4px; background: #d4d4d8; }
+.folder-scene .work-2 { inset: 4px; background: #e4e4e7; }
+.folder-scene .work-1 {
+  inset: 4px 0 0 0;
+  background: linear-gradient(to top, var(--f1-a), var(--f1-b));
+  border-top-right-radius: 0;
+  overflow: hidden;
+}
+.proj-folder:hover .work-5 { box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); }
+.proj-folder:hover .work-4 { transform: rotateX(-20deg); }
+.proj-folder:hover .work-3 { transform: rotateX(-30deg); }
+.proj-folder:hover .work-2 { transform: rotateX(-38deg); }
+.proj-folder:hover .work-1 {
+  transform: rotateX(-46deg) translateY(1px);
+  box-shadow: inset 0 20px 40px var(--glow-top), inset 0 -20px 40px var(--glow-bottom);
+}
+.folder-scene .work-5::after {
+  content: "";
+  position: absolute;
+  bottom: 99%;
+  left: 0;
+  width: 80px;
+  height: 16px;
+  background: var(--f5);
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+.folder-scene .work-5::before {
+  content: "";
+  position: absolute;
+  top: -15px;
+  left: 75.5px;
+  width: 16px;
+  height: 16px;
+  background: var(--f5);
+  clip-path: polygon(0 35%, 0% 100%, 50% 100%);
+}
+.folder-scene .work-1::after {
+  content: "";
+  position: absolute;
+  bottom: 99%;
+  right: 0;
+  width: 146px;
+  height: 16px;
+  background: var(--f1-tab);
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+.folder-scene .work-1::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  right: 142px;
+  width: 12px;
+  height: 12px;
+  background: var(--f1-tab);
+  clip-path: polygon(100% 14%, 50% 100%, 100% 100%);
+}
+.folder-scene .card-img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  border-radius: 15px;
+  border-top-right-radius: 0;
 }
-.card-img-wrap:hover img { transform: scale(1.06); }
-.card-img-wrap::after {
-  content: "Ver capturas";
-  position: absolute;
-  left: 50%;
-  bottom: 14px;
-  transform: translateX(-50%) translateY(8px);
-  background: rgba(27, 67, 50, 0.88);
-  color: var(--blanco);
-  font-size: 0.78rem;
+.card-project:hover .folder-scene .card-img { transform: none; }
+.folder-verde   { --f1-a: #2d6a4f; --f1-b: #40916c; --f1-tab: #40916c; --f5: #1b4332; --glow-top: #95d5b2; --glow-bottom: #2d6a4f; }
+.folder-madera  { --f1-a: #7a5230; --f1-b: #a5764a; --f1-tab: #a5764a; --f5: #4a2f1b; --glow-top: #b08a5c; --glow-bottom: #4a2f1b; }
+.folder-arena   { --f1-a: #95d5b2; --f1-b: #b7e4c7; --f1-tab: #b7e4c7; --f5: #40916c; --glow-top: #d8f3dc; --glow-bottom: #40916c; }
+.proj-hint {
+  font-size: 0.8rem;
   font-weight: 600;
-  padding: 7px 14px;
-  border-radius: 999px;
-  opacity: 0;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-  pointer-events: none;
-  white-space: nowrap;
+  color: var(--texto-suave);
+  opacity: 0.55;
+  transition: opacity 0.2s ease, color 0.2s ease;
 }
-.card-img-wrap:hover::after { opacity: 1; transform: translateX(-50%) translateY(0); }
+.proj-folder:hover .proj-hint { opacity: 1; color: var(--verde); }
 .card-img-count {
   position: absolute;
   top: 10px;
@@ -1004,6 +1090,10 @@ body::after {
   padding: 4px 10px;
   border-radius: 999px;
   backdrop-filter: blur(4px);
+  z-index: 3;
+}
+@media (max-width: 900px) {
+  #portafolio .cards { grid-template-columns: 1fr; }
 }
 
 /* ---------- Lightbox ---------- */
