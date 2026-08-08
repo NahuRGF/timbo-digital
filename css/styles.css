@@ -143,7 +143,7 @@ ul { list-style: none; }
     var(--crema);
   overflow: hidden;
 }
-.hero-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; align-items: center; gap: 40px; }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); align-items: center; gap: 40px; }
 
 .hero-content { position: relative; z-index: 1; }
 
@@ -183,7 +183,6 @@ ul { list-style: none; }
 .hero-title .highlight {
   color: var(--verde);
   position: relative;
-  white-space: nowrap;
 }
 .hero-subtitle {
   font-size: 1.08rem;
@@ -847,7 +846,7 @@ body::after {
 /* ---------- Hero: ring + chips flotantes ---------- */
 .hero-showcase {
   position: relative;
-  padding: 52px 8px;
+  padding: 64px 8px;
 }
 .hero-showcase-logo { width: min(300px, 82%); }
 .hero-ring {
@@ -891,9 +890,9 @@ body::after {
   animation: chip-float 5.5s ease-in-out infinite;
 }
 .float-chip span, .float-chip { color: var(--verde-oscuro); }
-.chip-1 { top: 4px; left: 2%; animation-delay: 0s; }
-.chip-2 { top: 4px; right: 2%; animation-delay: -1.8s; }
-.chip-3 { bottom: 4px; left: 14%; animation-delay: -3.4s; }
+.chip-1 { top: 6px; left: 2%; animation-delay: 0s; }
+.chip-2 { top: 6px; right: 2%; animation-delay: -1.8s; }
+.chip-3 { bottom: 6px; left: 14%; animation-delay: -3.4s; }
 @keyframes chip-float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-13px); }
