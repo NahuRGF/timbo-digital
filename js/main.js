@@ -300,4 +300,372 @@
     );
     spySections.forEach(function (s) { spy.observe(s); });
   }
+
+  // ---------- Galería del portafolio ----------
+  var PORTAFOLIO = "assets/portafolio";
+  var gallery = {};
+  var projectCards = Array.prototype.slice.call(document.querySelectorAll(".card-project[data-folder]"));
+  var lightbox = document.getElementById("lightbox");
+  var lbImg = document.getElementById("lightboxImg");
+  var lbCaption = document.getElementById("lightboxCaption");
+  var lbList = [];
+  var lbIndex = 0;
+
+  function portafolioPath(slug, file) {
+    return PORTAFOLIO + "/" + slug + "/" + file;
+  }
+
+  function loadManifest() {
+    return fetch(PORTAFOLIO + "/manifest.json?v=" + Date.now(), { cache: "no-store" })
+      .then(function (r) { return r.ok ? r.json() : {}; })
+      .catch(function () { return {}; });
+  }
+
+  function refreshPortfolio(imgs) {
+    gallery = imgs || gallery;
+    projectCards.forEach(function (card) {
+      var slug = card.getAttribute("data-folder");
+      var list = (gallery[slug] || []).filter(Boolean);
+      var img = card.querySelector(".card-img");
+      var count = card.querySelector(".card-img-count");
+      if (!img) return;
+      if (list.length) {
+        img.src = portafolioPath(slug, list[0]);
+        img.alt = "Captura del proyecto";
+        count.hidden = false;
+        count.textContent = list.length + (list.length === 1 ? " imagen" : " imágenes");
+      } else {
+        img.src = img.getAttribute("data-fallback");
+        count.hidden = true;
+      }
+    });
+  }
+
+  function showLightboxImage() {
+    var item = lbList[lbIndex];
+    lbImg.src = item.src;
+    lbCaption.textContent = item.title + (lbList.length > 1 ? " · " + (lbIndex + 1) + "/" + lbList.length : "");
+    document.getElementById("lightboxPrev").style.visibility = lbList.length > 1 ? "visible" : "hidden";
+    document.getElementById("lightboxNext").style.visibility = lbList.length > 1 ? "visible" : "hidden";
+  }
+
+  function openLightbox(card) {
+    var slug = card.getAttribute("data-folder");
+    var wrap = card.querySelector(".card-img-wrap");
+    var img = card.querySelector(".card-img");
+    var title = (wrap && wrap.getAttribute("data-title")) || "";
+    var list = (gallery[slug] || []).filter(Boolean);
+    if (list.length) {
+      lbList = list.map(function (f) { return { src: portafolioPath(slug, f), title: title }; });
+    } else {
+      lbList = [{ src: img.getAttribute("data-fallback"), title: title }];
+    }
+    lbIndex = 0;
+    showLightboxImage();
+    lightbox.classList.add("open");
+    lightbox.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove("open");
+    lightbox.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+    lbImg.src = "";
+  }
+
+  if (lightbox) {
+    projectCards.forEach(function (card) {
+      var wrap = card.querySelector(".card-img-wrap");
+      if (wrap) wrap.addEventListener("click", function () { openLightbox(card); });
+    });
+    document.getElementById("lightboxClose").addEventListener("click", closeLightbox);
+    document.getElementById("lightboxPrev").addEventListener("click", function () {
+      lbIndex = (lbIndex - 1 + lbList.length) % lbList.length;
+      showLightboxImage();
+    });
+    document.getElementById("lightboxNext").addEventListener("click", function () {
+      lbIndex = (lbIndex + 1) % lbList.length;
+      showLightboxImage();
+    });
+    lightbox.addEventListener("click", function (e) {
+      if (e.target === lightbox) closeLightbox();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (!lightbox.classList.contains("open")) return;
+      if (e.key === "Escape") closeLightbox();
+      if (e.key === "ArrowLeft") document.getElementById("lightboxPrev").click();
+      if (e.key === "ArrowRight") document.getElementById("lightboxNext").click();
+    });
+  }
+
+  loadManifest().then(refreshPortfolio);
+
+  // ---------- Volver arriba ----------
+  var toTop = document.getElementById("toTop");
+  if (toTop) {
+    window.addEventListener("scroll", function () {
+      toTop.classList.toggle("show", window.scrollY > 600);
+    }, { passive: true });
+    toTop.addEventListener("click", function () {
+      window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+    });
+  }
+
+  // ---------- Panel admin (solo el dueño) ----------
+  var adminModal = document.getElementById("adminModal");
+  if (adminModal) {
+    var adminConfig = document.getElementById("adminConfig");
+    var adminUpload = document.getElementById("adminUpload");
+    var pwInput = document.getElementById("adminPassword");
+    var tokenInput = document.getElementById("adminToken");
+    var saveBtn = document.getElementById("adminSave");
+    var adminStatus = document.getElementById("adminStatus");
+    var uploadStatus = document.getElementById("adminUploadStatus");
+    var adminProjectsEl = document.getElementById("adminProjects");
+    var adminHash = localStorage.getItem("timbo_hash") || "";
+    var adminToken = localStorage.getItem("timbo_token") || "";
+    var adminAuthed = false;
+    if (tokenInput) tokenInput.value = adminToken;
+
+    function adminSetStatus(el, msg, ok) {
+      el.textContent = msg;
+      el.className = "admin-status " + (ok ? "ok" : "bad");
+    }
+
+    function sha256(text) {
+      if (!window.crypto || !crypto.subtle) {
+        var h = 0;
+        for (var i = 0; i < text.length; i++) h = (h * 31 + text.charCodeAt(i)) | 0;
+        return Promise.resolve("plain-" + (h >>> 0).toString(16));
+      }
+      return crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)).then(function (buf) {
+        return Array.prototype.map.call(new Uint8Array(buf), function (b) {
+          return ("0" + b.toString(16)).slice(-2);
+        }).join("");
+      });
+    }
+
+    function adminApi() {
+      return {
+        "Authorization": "token " + adminToken,
+        "Accept": "application/vnd.github+json",
+        "Content-Type": "application/json"
+      };
+    }
+
+    function adminOpen() {
+      adminModal.classList.add("open");
+      adminModal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+      if (adminAuthed) {
+        adminConfig.hidden = true;
+        adminUpload.hidden = false;
+        buildProjects();
+      } else {
+        adminConfig.hidden = false;
+        adminUpload.hidden = true;
+        adminStatus.textContent = "";
+        pwInput.focus();
+      }
+    }
+
+    function adminClose() {
+      adminModal.classList.remove("open");
+      adminModal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+    }
+
+    document.getElementById("adminOpen").addEventListener("click", function (e) {
+      e.preventDefault();
+      adminOpen();
+    });
+    document.getElementById("adminClose").addEventListener("click", adminClose);
+    adminModal.addEventListener("click", function (e) {
+      if (e.target === adminModal) adminClose();
+    });
+
+    saveBtn.addEventListener("click", function () {
+      var pw = pwInput.value;
+      var tk = tokenInput.value.trim();
+      if (!pw) return adminSetStatus(adminStatus, "Escribí tu contraseña.", false);
+      if (!tk) return adminSetStatus(adminStatus, "Pegá tu token de GitHub.", false);
+      sha256(pw).then(function (hash) {
+        if (adminHash && hash !== adminHash) return adminSetStatus(adminStatus, "Contraseña incorrecta.", false);
+        adminHash = hash;
+        adminToken = tk;
+        localStorage.setItem("timbo_hash", hash);
+        localStorage.setItem("timbo_token", tk);
+        adminAuthed = true;
+        pwInput.value = "";
+        adminConfig.hidden = true;
+        adminUpload.hidden = false;
+        adminSetStatus(adminStatus, "", true);
+        buildProjects();
+      });
+    });
+
+    function getManifest() {
+      return fetch("https://api.github.com/repos/NahuRGF/timbo-digital/contents/assets/portafolio/manifest.json", { headers: adminApi() })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (data.content) return { obj: JSON.parse(atob(data.content.replace(/\n/g, ""))), sha: data.sha };
+          return { obj: {}, sha: null };
+        });
+    }
+
+    function putManifest(obj, sha) {
+      return fetch("https://api.github.com/repos/NahuRGF/timbo-digital/contents/assets/portafolio/manifest.json", {
+        method: "PUT",
+        headers: adminApi(),
+        body: JSON.stringify({
+          message: "Actualizar imágenes del portafolio",
+          content: btoa(JSON.stringify(obj, null, 2)),
+          sha: sha || undefined
+        })
+      });
+    }
+
+    function folderApi(slug, filename) {
+      return "https://api.github.com/repos/NahuRGF/timbo-digital/contents/assets/portafolio/" + slug + (filename ? "/" + filename : "");
+    }
+
+    function readFileBase64(file) {
+      return new Promise(function (resolve, reject) {
+        var fr = new FileReader();
+        fr.onload = function () { resolve(fr.result.split(",")[1]); };
+        fr.onerror = reject;
+        fr.readAsDataURL(file);
+      });
+    }
+
+    function loadFolderImgs(slug, container) {
+      container.innerHTML = "";
+      fetch(folderApi(slug), { headers: adminApi() })
+        .then(function (r) { return r.ok ? r.json() : []; })
+        .then(function (list) {
+          if (!Array.isArray(list)) return;
+          list.forEach(function (item) {
+            var fig = document.createElement("figure");
+            var im = document.createElement("img");
+            im.src = item.download_url;
+            var del = document.createElement("button");
+            del.textContent = "×";
+            del.title = "Eliminar " + item.name;
+            fig.appendChild(im);
+            fig.appendChild(del);
+            container.appendChild(fig);
+            del.addEventListener("click", function () {
+              if (!window.confirm("¿Eliminar " + item.name + "?")) return;
+              del.disabled = true;
+              fetch(folderApi(slug, item.name), {
+                method: "DELETE",
+                headers: adminApi(),
+                body: JSON.stringify({ message: "Quitar imagen " + slug + "/" + item.name, sha: item.sha })
+              })
+                .then(function (r) { if (!r.ok) throw new Error("del"); return updateManifestFromRepo(); })
+                .then(function () { loadFolderImgs(slug, container); refreshPortfolioFromRepo(); })
+                .catch(function () { del.disabled = false; window.alert("No se pudo eliminar la imagen."); });
+            });
+          });
+        })
+        .catch(function () {});
+    }
+
+    function updateManifestFromRepo() {
+      var folders = projectCards.map(function (c) { return c.getAttribute("data-folder"); });
+      return Promise.all(folders.map(function (slug) {
+        return fetch(folderApi(slug), { headers: adminApi() })
+          .then(function (r) { return r.ok ? r.json() : []; })
+          .then(function (list) {
+            return { slug: slug, files: Array.isArray(list) ? list.map(function (i) { return i.name; }).sort() : [] };
+          });
+      }))
+        .then(function (results) {
+          var obj = {};
+          results.forEach(function (r) { obj[r.slug] = r.files; });
+          return getManifest().then(function (m) { return putManifest(obj, m.sha); });
+        });
+    }
+
+    function refreshPortfolioFromRepo() {
+      loadManifest().then(refreshPortfolio);
+    }
+
+    function buildProjects() {
+      adminProjectsEl.innerHTML = "";
+      projectCards.forEach(function (card) {
+        var slug = card.getAttribute("data-folder");
+        var title = (card.querySelector(".card-title") || {}).textContent || slug;
+        var box = document.createElement("div");
+        box.className = "admin-project";
+
+        var h = document.createElement("h3");
+        h.textContent = title;
+        var f = document.createElement("p");
+        f.className = "folder";
+        f.textContent = "assets/portafolio/" + slug + "/";
+
+        var row = document.createElement("div");
+        row.className = "admin-row";
+        var file = document.createElement("input");
+        file.type = "file";
+        file.multiple = true;
+        file.accept = "image/*";
+        var up = document.createElement("button");
+        up.className = "btn btn-primary btn-sm";
+        up.textContent = "Subir";
+        var msg = document.createElement("p");
+        msg.className = "admin-status";
+        row.appendChild(file);
+        row.appendChild(up);
+        row.appendChild(msg);
+
+        var imgs = document.createElement("div");
+        imgs.className = "admin-imgs";
+
+        box.appendChild(h);
+        box.appendChild(f);
+        box.appendChild(row);
+        box.appendChild(imgs);
+        adminProjectsEl.appendChild(box);
+
+        loadFolderImgs(slug, imgs);
+
+        up.addEventListener("click", function () {
+          var files = Array.prototype.slice.call(file.files || []);
+          if (!files.length) return adminSetStatus(msg, "Elegí al menos una imagen.", false);
+          up.disabled = true;
+          adminSetStatus(msg, "Subiendo " + files.length + " imagen(es)...", true);
+          var jobs = files.map(function (fl) {
+            var safe = fl.name.replace(/[^a-zA-Z0-9._-]/g, "_").toLowerCase();
+            var filename = Date.now() + "-" + safe;
+            return readFileBase64(fl).then(function (b64) {
+              return fetch(folderApi(slug, filename), {
+                method: "PUT",
+                headers: adminApi(),
+                body: JSON.stringify({ message: "Agregar imagen " + slug + "/" + filename, content: b64 })
+              });
+            });
+          });
+          Promise.all(jobs)
+            .then(function (responses) {
+              if (responses.some(function (r) { return !r.ok; })) throw new Error("Algunas imágenes no se subieron.");
+              return updateManifestFromRepo();
+            })
+            .then(function () {
+              adminSetStatus(msg, "¡Imágenes subidas!", true);
+              up.disabled = false;
+              file.value = "";
+              loadFolderImgs(slug, imgs);
+              refreshPortfolioFromRepo();
+            })
+            .catch(function (err) {
+              adminSetStatus(msg, (err && err.message) || "Error al subir.", false);
+              up.disabled = false;
+            });
+        });
+      });
+    }
+  }
 })();

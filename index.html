@@ -109,12 +109,16 @@
           </ul>
         </div>
           <div class="hero-showcase" aria-hidden="true" data-reveal>
+            <div class="hero-ring"></div>
             <img src="assets/logo.png" alt="" class="hero-showcase-logo">
-          </div>
-          <div class="hero-art" aria-hidden="true">
-            <img src="assets/logo.png" alt="" class="hero-logo">
+            <span class="float-chip chip-1">⚡ Sistemas a medida</span>
+            <span class="float-chip chip-2">💬 Soporte continuo</span>
+            <span class="float-chip chip-3">📈 Resultados reales</span>
           </div>
       </div>
+      <a href="#servicios" class="scroll-hint" aria-label="Bajar a servicios">
+        <span></span>
+      </a>
     </section>
 
     <div class="marquee" aria-hidden="true">
@@ -291,29 +295,41 @@
           <p class="section-sub">Una muestra de cómo transformamos necesidades reales en herramientas útiles.</p>
         </div>
         <div class="cards">
-          <article class="card card-project" data-reveal>
+          <article class="card card-project" data-reveal data-folder="stock-ventas">
             <div class="card-badge">Sistema de gestión</div>
             <h3 class="card-title">Gestión de stock y ventas</h3>
             <p class="card-text">Sistema para un comercio pyme que unificó inventario, ventas y reportes en una sola plataforma.</p>
-            <img src="assets/proyectos/stock-ventas.svg" alt="Ilustración: inventario que se transforma en reportes de ventas" class="card-img">
+            <button type="button" class="card-img-wrap" data-title="Gestión de stock y ventas">
+              <img src="assets/proyectos/stock-ventas.svg" alt="Ilustración: inventario que se transforma en reportes de ventas" class="card-img" data-fallback="assets/proyectos/stock-ventas.svg">
+              <span class="card-img-count" hidden></span>
+            </button>
           </article>
-          <article class="card card-project" data-reveal>
+          <article class="card card-project" data-reveal data-folder="turnos-online">
             <div class="card-badge">App web</div>
             <h3 class="card-title">Plataforma de turnos online</h3>
             <p class="card-text">Agenda de turnos con recordatorios automáticos que redujo las ausencias de los pacientes.</p>
-            <img src="assets/proyectos/turnos-online.svg" alt="Ilustración: calendario de turnos con recordatorio y confirmación" class="card-img">
+            <button type="button" class="card-img-wrap" data-title="Plataforma de turnos online">
+              <img src="assets/proyectos/turnos-online.svg" alt="Ilustración: calendario de turnos con recordatorio y confirmación" class="card-img" data-fallback="assets/proyectos/turnos-online.svg">
+              <span class="card-img-count" hidden></span>
+            </button>
           </article>
-          <article class="card card-project" data-reveal>
+          <article class="card card-project" data-reveal data-folder="pagos-crm">
             <div class="card-badge">Automatización</div>
             <h3 class="card-title">Integración de pagos y CRM</h3>
             <p class="card-text">Automatización que sincroniza cobros con el registro de clientes y los estados de cada operación.</p>
-            <img src="assets/proyectos/pagos-crm.svg" alt="Ilustración: cobro de tarjeta sincronizado con el registro de clientes" class="card-img">
+            <button type="button" class="card-img-wrap" data-title="Integración de pagos y CRM">
+              <img src="assets/proyectos/pagos-crm.svg" alt="Ilustración: cobro de tarjeta sincronizado con el registro de clientes" class="card-img" data-fallback="assets/proyectos/pagos-crm.svg">
+              <span class="card-img-count" hidden></span>
+            </button>
           </article>
-          <article class="card card-project" data-reveal>
+          <article class="card card-project" data-reveal data-folder="sitio-institucional">
             <div class="card-badge">Página web</div>
             <h3 class="card-title">Sitio institucional</h3>
             <p class="card-text">Presencia web rápida y profesional para un estudio de servicios profesionales.</p>
-            <img src="assets/proyectos/sitio-institucional.svg" alt="Ilustración: página web institucional en un monitor" class="card-img">
+            <button type="button" class="card-img-wrap" data-title="Sitio institucional">
+              <img src="assets/proyectos/sitio-institucional.svg" alt="Ilustración: página web institucional en un monitor" class="card-img" data-fallback="assets/proyectos/sitio-institucional.svg">
+              <span class="card-img-count" hidden></span>
+            </button>
           </article>
         </div>
         <p class="section-note">¿Querés ver algo similar a tu proyecto? <a href="#contacto">Contanos tu idea</a>.</p>
@@ -375,13 +391,42 @@
   </main>
 
   <footer class="footer">
-    <div class="container footer-inner">
-      <a href="#inicio" class="brand">
-        <img src="assets/logo.png" alt="Timbó Digital" class="brand-logo">
-        <span class="brand-text">Timbó<span class="brand-accent">Digital</span></span>
-      </a>
-      <p class="footer-text">Software a medida para tu negocio.</p>
-      <p class="footer-copy">© <span id="year">2026</span> Timbó Digital. Todos los derechos reservados.</p>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col footer-brand-col">
+          <a href="#inicio" class="brand">
+            <img src="assets/logo.png" alt="Timbó Digital" class="brand-logo">
+            <span class="brand-text">Timbó<span class="brand-accent">Digital</span></span>
+          </a>
+          <p class="footer-text">Software a medida para tu negocio: sistemas de gestión, páginas web y automatizaciones.</p>
+          <div class="footer-social">
+            <a href="https://wa.me/5493755392520" aria-label="WhatsApp" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.86 9.86 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 18.15h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.17.24-.64.8-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.1-.23-.16-.48-.29z"/></svg>
+            </a>
+            <a href="mailto:rgaston.florentin@gmail.com" aria-label="Email">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-heading">Secciones</h4>
+          <a href="#servicios">Servicios</a>
+          <a href="#listos">Soluciones listas</a>
+          <a href="#gratis">Herramienta gratis</a>
+          <a href="#portafolio">Portafolio</a>
+          <a href="#contacto">Contacto</a>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-heading">Contacto</h4>
+          <a href="https://wa.me/5493755392520" target="_blank" rel="noopener">WhatsApp · +54 9 3755 392520</a>
+          <a href="mailto:rgaston.florentin@gmail.com">rgaston.florentin@gmail.com</a>
+          <a href="https://github.com/NahuRGF" target="_blank" rel="noopener">GitHub · NahuRGF</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">© <span id="year">2026</span> Timbó Digital. Todos los derechos reservados.</p>
+        <a href="#admin" class="footer-admin" id="adminOpen" aria-label="Acceso del administrador">🔒</a>
+      </div>
     </div>
   </footer>
 
@@ -390,6 +435,49 @@
       <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.86 9.86 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 18.15h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.17.24-.64.8-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.1-.23-.16-.48-.29z"/>
     </svg>
   </a>
+
+  <button class="to-top" id="toTop" aria-label="Volver arriba" aria-hidden="true">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+  </button>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Cerrar">×</button>
+    <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Anterior">‹</button>
+    <figure class="lightbox-figure">
+      <img id="lightboxImg" src="" alt="">
+      <figcaption class="lightbox-caption" id="lightboxCaption"></figcaption>
+    </figure>
+    <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Siguiente">›</button>
+  </div>
+
+  <div class="admin-modal" id="adminModal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="admin-panel">
+      <button class="admin-close" id="adminClose" aria-label="Cerrar panel">×</button>
+      <h2 class="admin-title">Panel del administrador</h2>
+      <p class="admin-sub">Subí las imágenes reales de cada programa del portafolio. El acceso es privado: contraseña y token se guardan solo en este navegador.</p>
+
+      <div class="admin-config" id="adminConfig">
+        <div class="form-field">
+          <label for="adminPassword">Contraseña</label>
+          <input type="password" id="adminPassword" placeholder="Tu contraseña" autocomplete="off">
+        </div>
+        <div class="form-field">
+          <label for="adminToken">Token de GitHub (solo lectura/escritura del repo timbo-digital)</label>
+          <input type="password" id="adminToken" placeholder="github_pat_..." autocomplete="off">
+        </div>
+        <div class="admin-actions">
+          <button type="button" class="btn btn-primary" id="adminSave">Guardar y entrar</button>
+        </div>
+        <p class="admin-hint">Creá un <em>fine-grained personal access token</em> en GitHub (Settings → Developer settings → Fine-grained tokens), con solo acceso al repo <strong>NahuRGF/timbo-digital</strong> y permisos de <strong>Contents: Read and write</strong>.</p>
+        <p class="admin-status" id="adminStatus" role="status"></p>
+      </div>
+
+      <div class="admin-upload" id="adminUpload" hidden>
+        <p class="admin-status" id="adminUploadStatus" role="status"></p>
+        <div id="adminProjects" class="admin-projects"></div>
+      </div>
+    </div>
+  </div>
 
   <script src="js/main.js"></script>
 </body>
